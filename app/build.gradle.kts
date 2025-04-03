@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.apollo.runtime)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 apollo {
@@ -66,4 +69,15 @@ dependencies {
 
     //apollo
     implementation(libs.apollo.runtime)
+
+    //hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    //navigation compose
+    implementation(libs.androidx.navigation.compose)
+
+    //kotlinx serialization json
+    implementation(libs.kotlinx.serialization.json)
+
 }
