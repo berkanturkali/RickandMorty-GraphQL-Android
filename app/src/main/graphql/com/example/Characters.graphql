@@ -1,0 +1,15 @@
+query {
+    characters(page: 1) {
+        results {
+            name
+            status
+            origin {
+                name
+            }
+            location {
+                name
+            }
+
+        }
+    }
+}
