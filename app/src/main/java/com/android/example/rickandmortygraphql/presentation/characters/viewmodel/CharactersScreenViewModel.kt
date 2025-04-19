@@ -1,6 +1,8 @@
 package com.android.example.rickandmortygraphql.presentation.characters.viewmodel
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.example.rickandmortygraphql.data.abstraction.CharacterClient
@@ -14,6 +16,8 @@ import javax.inject.Inject
 class CharactersScreenViewModel @Inject constructor(
     private val characterClient: CharacterClient
 ) : ViewModel() {
+
+    var searchQuery by mutableStateOf("")
 
     var characters = mutableStateOf(emptyList<SimpleCharacter>())
         private set
