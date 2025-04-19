@@ -26,10 +26,10 @@ import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 
 @Composable
 fun CharacterNameAndSpecies(
-    modifier: Modifier = Modifier,
     name: String,
     status: CharacterStatus,
     species: String,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,

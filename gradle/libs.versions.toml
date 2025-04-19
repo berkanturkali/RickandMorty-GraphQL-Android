@@ -16,6 +16,8 @@ kotlinXSerializationJson = "1.8.0"
 timber = "5.0.1"
 hiltNavigationCompose = "1.2.0"
 coil = "3.1.0"
+detekt = "1.23.8"
+twitterComposeRules = "0.0.26"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +43,7 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+twitter-compose-rules = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitterComposeRules" }
 
 
 [plugins]
@@ -51,3 +54,4 @@ apollo-runtime = { id = "com.apollographql.apollo", version.ref = "apollographql
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

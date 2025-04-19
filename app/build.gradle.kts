@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.detekt)
 }
 
 apollo {
@@ -54,6 +55,13 @@ android {
     }
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    allRules = false
+    autoCorrect = true
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -94,5 +102,7 @@ dependencies {
     //coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    detektPlugins(libs.twitter.compose.rules)
 
 }
