@@ -1,8 +1,10 @@
-query {
-    characters(page: 1) {
+query Characters($page: Int!) {
+    characters(page: $page) {
         results {
             name
             status
+            species
+            image
             origin {
                 name
             }

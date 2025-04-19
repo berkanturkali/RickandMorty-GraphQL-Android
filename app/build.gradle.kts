@@ -26,9 +26,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GRAPHQL_BASE_URL", "\"https://rickandmortyapi.com/graphql/\"")
     }
 
     buildTypes {
+        debug {
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -46,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -79,5 +84,15 @@ dependencies {
 
     //kotlinx serialization json
     implementation(libs.kotlinx.serialization.json)
+
+    //timber
+    implementation(libs.timber)
+
+    //hilt navigation compose
+    implementation(libs.hilt.navigation.compose)
+
+    //coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 }
