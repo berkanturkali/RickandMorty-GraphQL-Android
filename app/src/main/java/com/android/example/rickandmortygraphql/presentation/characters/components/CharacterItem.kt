@@ -52,7 +52,8 @@ fun CharacterItem(
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SubcomposeAsyncImage(
                 model = image,

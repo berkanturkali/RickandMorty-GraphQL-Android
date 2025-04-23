@@ -5,4 +5,17 @@
     <string name="last_known_location">Last known location:</string>
     <string name="first_seen_in">First seen in:</string>
     <string name="search_by_name">Search by name</string>
+    <string name="filter_options_title">Filters</string>
+
+    <string name="status_filter_title">Status</string>
+    <string name="species_filter_title">Species</string>
+    <string name="gender_filter_title">Gender</string>
+
+    <string-array name="species_filter_options">
+        <item>Human</item>
+        <item>Alien</item>
+        <item>Mythological Creature</item>
+        <item>Animal</item>
+        <item>Robot</item>
+    </string-array>
 </resources>

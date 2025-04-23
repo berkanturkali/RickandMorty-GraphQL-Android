@@ -20,7 +20,7 @@ val MaterialTheme.rickAndMortyColors: RickAndMortyColors
 
 private val DarkThemeColors = RickAndMortyColors(
     background = BackgroundColors(
-        primary = Color(0xFF272B33),
+        primary = Color(0xFF0F0F0F),
         surface = Color(0xFF3C3E44),
     ),
     text = TextColors(
