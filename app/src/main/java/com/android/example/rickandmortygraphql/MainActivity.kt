@@ -7,12 +7,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.example.rickandmortygraphql.navigation.RickAndMortyDestinations
 import com.android.example.rickandmortygraphql.presentation.characters.screen.CharactersScreen
+import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
 import com.android.example.rickandmortygraphql.presentation.filter.screen.CharacterFilterOptionsScreen
 import com.android.example.rickandmortygraphql.presentation.filter.screen.FilterScreen
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
@@ -27,6 +32,7 @@ import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SELECTED_FILTER_ARG_KEY = "selected_filter"
+const val SET_BADGE_ON_FILTERS_KEY = "set_badge_on_filters"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,11 +42,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
+            val focusManager = LocalFocusManager.current
+
             val context = LocalContext.current
             RickAndMortyGraphQLTheme {
                 Scaffold(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                focusManager.clearFocus(true)
+                            }
+                        },
                     containerColor = MaterialTheme.rickAndMortyColors.background.primary
                 ) { innerPadding ->
 
@@ -63,9 +76,17 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                         ) {
-                            CharactersScreen(navigateToFilterScreen = {
-                                navController.navigate(RickAndMortyDestinations.CharacterFilterOptionsScreen)
-                            })
+                            val viewModel = hiltViewModel<CharactersScreenViewModel>()
+                            val setBadgeOnFilters = it.savedStateHandle.get<Boolean>(
+                                SET_BADGE_ON_FILTERS_KEY
+                            )
+                            CharactersScreen(
+                                setBadgeOnFilters = setBadgeOnFilters,
+                                viewModel = viewModel,
+                                navigateToFilterScreen = {
+                                    it.savedStateHandle[SET_BADGE_ON_FILTERS_KEY] = null
+                                    navController.navigate(RickAndMortyDestinations.CharacterFilterOptionsScreen)
+                                })
                         }
 
                         composable<RickAndMortyDestinations.CharacterFilterOptionsScreen>(
@@ -88,6 +109,12 @@ class MainActivity : ComponentActivity() {
                             CharacterFilterOptionsScreen(
                                 selectedFilter = selectedFilter,
                                 navigateUp = navController::navigateUp,
+                                onCheckMarkClick = {
+                                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                                        SET_BADGE_ON_FILTERS_KEY,
+                                        true
+                                    )
+                                },
                                 onFilterOptionClick = { filter ->
                                     val title = context.getString(filter.type.titleResId)
                                     navController.navigate(

@@ -37,6 +37,7 @@ import java.util.UUID
 fun CharacterFilterOptionsScreen(
     selectedFilter: String?,
     navigateUp: () -> Unit,
+    onCheckMarkClick: () -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CharacterFilterViewModel = hiltViewModel(),
@@ -62,6 +63,7 @@ fun CharacterFilterOptionsScreen(
             viewModel.insertCharacterFilter(
                 filterEntity
             )
+            onCheckMarkClick()
             navigateUp()
         },
         onFilterOptionClick = {

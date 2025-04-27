@@ -8,7 +8,7 @@ class FilterRepository @Inject constructor(
     private val characterFilterDao: CharacterFilterDao,
 ) {
 
-    suspend fun getCharacterFilters() = characterFilterDao.getCharacterFilters()
+    fun getCharacterFilters() = characterFilterDao.getCharacterFilters()
 
     suspend fun insertCharacterFilter(characterFilter: CharacterFilterEntity) =
         characterFilterDao.insertCharacterFilter(characterFilter)

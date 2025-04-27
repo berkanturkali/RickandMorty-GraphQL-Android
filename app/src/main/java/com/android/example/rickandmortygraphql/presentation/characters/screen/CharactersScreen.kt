@@ -1,5 +1,8 @@
 package com.android.example.rickandmortygraphql.presentation.characters.screen
 
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,10 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.example.rickandmortygraphql.R
 import com.android.example.rickandmortygraphql.model.CharacterStatus
 import com.android.example.rickandmortygraphql.model.SimpleCharacter
@@ -34,17 +37,24 @@ import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 
 @Composable
 fun CharactersScreen(
+    setBadgeOnFilters: Boolean?,
     navigateToFilterScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CharactersScreenViewModel = hiltViewModel<CharactersScreenViewModel>()
+    viewModel: CharactersScreenViewModel,
 ) {
 
     val characters by viewModel.characters
 
+    viewModel.showBadgeOnFiltersIcon = setBadgeOnFilters ?: false
+
     CharactersScreenContent(
+        showBadgeOnFiltersIcon = viewModel.showBadgeOnFiltersIcon,
         searchQuery = viewModel.searchQuery,
         characters = characters,
-        navigateToFilterScreen = navigateToFilterScreen,
+        navigateToFilterScreen = {
+            viewModel.showBadgeOnFiltersIcon = false
+            navigateToFilterScreen()
+        },
         onSearchQueryChanged = {
             viewModel.searchQuery = it
         },
@@ -55,6 +65,7 @@ fun CharactersScreen(
 @Composable
 private fun CharactersScreenContent(
     searchQuery: String,
+    showBadgeOnFiltersIcon: Boolean,
     characters: List<SimpleCharacter>,
     navigateToFilterScreen: () -> Unit,
     onSearchQueryChanged: (String) -> Unit,
@@ -70,6 +81,7 @@ private fun CharactersScreenContent(
                 .padding(vertical = 6.dp),
             contentAlignment = Alignment.CenterEnd
         ) {
+
             Icon(
                 painter = painterResource(id = R.drawable.ic_filter),
                 contentDescription = null,
@@ -89,6 +101,18 @@ private fun CharactersScreenContent(
                         navigateToFilterScreen()
                     }
             )
+            androidx.compose.animation.AnimatedVisibility(
+                visible = showBadgeOnFiltersIcon,
+                enter = scaleIn(),
+                exit = scaleOut(),
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .background(Color.Red, shape = CircleShape)
+                )
+            }
         }
         CharactersSearchBar(
             value = searchQuery,
@@ -146,6 +170,7 @@ private fun CharactersScreenContentPrev() {
             ),
             onSearchQueryChanged = {},
             navigateToFilterScreen = { /*TODO*/ },
+            showBadgeOnFiltersIcon = true
         )
     }
 }

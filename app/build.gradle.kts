@@ -113,4 +113,7 @@ dependencies {
     //livedata
     implementation(libs.androidx.compose.runtime.livedata)
 
+    //okhttp
+    implementation(libs.squareup.okhttp3.logging.interceptor)
+
 }

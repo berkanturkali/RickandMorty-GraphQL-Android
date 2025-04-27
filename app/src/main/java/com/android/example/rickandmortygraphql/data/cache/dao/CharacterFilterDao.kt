@@ -6,12 +6,13 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilterEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CharacterFilterDao {
 
     @Query("SELECT * FROM character_filter")
-    suspend fun getCharacterFilters(): CharacterFilterEntity?
+    fun getCharacterFilters(): Flow<CharacterFilterEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacterFilter(characterFilter: CharacterFilterEntity)

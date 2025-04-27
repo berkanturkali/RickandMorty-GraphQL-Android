@@ -12,6 +12,7 @@ import com.android.example.rickandmortygraphql.model.CharacterFilter
 import com.android.example.rickandmortygraphql.model.CharacterFilterDataSource
 import com.android.example.rickandmortygraphql.model.CharacterFilterType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
@@ -38,7 +39,7 @@ class CharacterFilterViewModel @Inject constructor(
 
     private fun getCharacterFilters() {
         viewModelScope.launch {
-            val defaultFilters = filterRepository.getCharacterFilters()
+            val defaultFilters = filterRepository.getCharacterFilters().firstOrNull()
             filters = if (defaultFilters != null) {
                 defaultFilterId = defaultFilters.id
                 CharacterFilterDataSource.getFilters(application.applicationContext).map { filter ->
@@ -55,13 +56,6 @@ class CharacterFilterViewModel @Inject constructor(
     fun insertCharacterFilter(characterFilter: CharacterFilterEntity) {
         viewModelScope.launch {
             filterRepository.insertCharacterFilter(characterFilter)
-        }
-    }
-
-
-    fun deleteCharacterFilter(characterFilter: CharacterFilterEntity) {
-        viewModelScope.launch {
-            filterRepository.deleteCharacterFilter(characterFilter)
         }
     }
 

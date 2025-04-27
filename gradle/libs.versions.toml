@@ -20,6 +20,7 @@ detekt = "1.23.8"
 twitterComposeRules = "0.0.26"
 room = "2.7.0"
 livedataRuntime = "1.8.0"
+loggingInterceptor = "4.12.0"
 
 
 [libraries]
@@ -51,6 +52,7 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "livedataRuntime" }
+squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 
 
 [plugins]
