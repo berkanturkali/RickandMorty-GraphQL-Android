@@ -13,9 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,42 +20,68 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.example.rickandmortygraphql.R
+import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilterEntity
 import com.android.example.rickandmortygraphql.model.CharacterFilter
 import com.android.example.rickandmortygraphql.model.CharacterFilterDataSource
+import com.android.example.rickandmortygraphql.model.CharacterFilterType
 import com.android.example.rickandmortygraphql.presentation.filter.components.FilterOptionItem
+import com.android.example.rickandmortygraphql.presentation.filter.viewmodel.CharacterFilterViewModel
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import com.android.example.rickandmortygraphql.utils.noRippleClickable
+import java.util.UUID
 
 @Composable
 fun CharacterFilterOptionsScreen(
+    selectedFilter: String?,
     navigateUp: () -> Unit,
-    onCheckMarkClick: () -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: CharacterFilterViewModel = hiltViewModel(),
 ) {
+
+    val filters = viewModel.filters
+
+    viewModel.setSelectedFilter(selectedFilter)
 
     CharacterFilterOptionsScreenContent(
         modifier = modifier,
         navigateUp = navigateUp,
-        onCheckMarkClick = onCheckMarkClick,
-        onFilterOptionClick = onFilterOptionClick,
+        onCheckMarkClick = {
+            var filterEntity =
+                CharacterFilterEntity(id = viewModel.defaultFilterId ?: UUID.randomUUID())
+            filters.forEach {
+                filterEntity = when (it.type) {
+                    CharacterFilterType.Gender -> filterEntity.copy(gender = it.selectedFilter)
+                    CharacterFilterType.Species -> filterEntity.copy(species = it.selectedFilter)
+                    CharacterFilterType.Status -> filterEntity.copy(status = it.selectedFilter)
+                }
+            }
+            viewModel.insertCharacterFilter(
+                filterEntity
+            )
+            navigateUp()
+        },
+        onFilterOptionClick = {
+            viewModel.selectedFilterType = it.type
+            onFilterOptionClick(it)
+        },
+        filters = filters,
+        enableCheckMark = viewModel.enableCheckMark
     )
 }
 
 @Composable
 private fun CharacterFilterOptionsScreenContent(
+    enableCheckMark: Boolean,
+    filters: List<CharacterFilter<*>>,
     navigateUp: () -> Unit,
     onCheckMarkClick: () -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-
-    val enableCheckMark by rememberSaveable {
-        mutableStateOf(false)
-    }
 
     Column(
         modifier = modifier
@@ -76,9 +99,9 @@ private fun CharacterFilterOptionsScreenContent(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            CharacterFilterDataSource.getFilters(context).forEach { filter ->
+            filters.forEach { filter ->
                 FilterOptionItem(
-                    title = filter.title,
+                    title = stringResource(filter.type.titleResId),
                     selectedValue = filter.selectedFilter,
                     onClick = {
                         onFilterOptionClick(filter)
@@ -155,9 +178,11 @@ fun FiltersTopBar(
 fun CharacterFilterOptionsScreenContentPreview() {
     RickAndMortyGraphQLTheme {
         CharacterFilterOptionsScreenContent(
+            enableCheckMark = false,
             navigateUp = {},
             onCheckMarkClick = {},
             onFilterOptionClick = {},
+            filters = CharacterFilterDataSource.getFilters(LocalContext.current)
         )
     }
 }

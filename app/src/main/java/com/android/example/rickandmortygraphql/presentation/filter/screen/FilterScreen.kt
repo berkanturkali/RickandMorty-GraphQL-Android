@@ -34,14 +34,16 @@ import com.android.example.rickandmortygraphql.utils.noRippleClickable
 @Composable
 fun FilterScreen(
     title: String,
+    previouslySelectedFilter: String?,
     filters: List<String>,
     onBackButtonClick: () -> Unit,
-    onCheckMarkClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onCheckMarkClick: (String?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
 
     FilterScreenContent(
         title = title,
+        previouslySelectedFilter = previouslySelectedFilter,
         filters = filters,
         onBackButtonClick = onBackButtonClick,
         onCheckMarkClick = onCheckMarkClick,
@@ -52,14 +54,15 @@ fun FilterScreen(
 @Composable
 fun FilterScreenContent(
     title: String,
+    previouslySelectedFilter: String?,
     filters: List<String>,
     onBackButtonClick: () -> Unit,
-    onCheckMarkClick: () -> Unit,
+    onCheckMarkClick: (String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
     var selectedFilter by rememberSaveable {
-        mutableStateOf<String?>(null)
+        mutableStateOf(previouslySelectedFilter)
     }
 
     Column(
@@ -70,9 +73,11 @@ fun FilterScreenContent(
     ) {
         FiltersTopBar(
             title = title,
-            enableCheckMark = selectedFilter != null,
+            enableCheckMark = selectedFilter != previouslySelectedFilter,
             onBackButtonClick = onBackButtonClick,
-            onCheckMarkClick = onCheckMarkClick
+            onCheckMarkClick = {
+                onCheckMarkClick(selectedFilter)
+            }
         )
 
         filters.forEach { filter ->
@@ -82,10 +87,10 @@ fun FilterScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .noRippleClickable {
-                        if (selectedFilter == filter) {
-                            selectedFilter = null
+                        selectedFilter = if (selectedFilter == filter) {
+                            null
                         } else {
-                            selectedFilter = filter
+                            filter
                         }
                     }
             )
@@ -161,6 +166,7 @@ private fun FilterScreenContentPrev() {
     RickAndMortyGraphQLTheme {
         FilterScreenContent(
             title = "Status",
+            previouslySelectedFilter = "Alive",
             filters = listOf("Alive", "Dead", "Unknown"),
             onBackButtonClick = {},
             onCheckMarkClick = {},

@@ -8,15 +8,15 @@ object CharacterFilterDataSource {
     fun getFilters(context: Context): List<CharacterFilter<*>> {
         return listOf(
             CharacterFilter(
-                title = context.getString(R.string.status_filter_title),
+                type = CharacterFilterType.Status,
                 options = CharacterStatus.entries,
             ),
             CharacterFilter(
-                title = context.getString(R.string.species_filter_title),
+                type = CharacterFilterType.Species,
                 options = context.resources.getStringArray(R.array.species_filter_options).toList(),
             ),
             CharacterFilter(
-                title = context.getString(R.string.gender_filter_title),
+                type = CharacterFilterType.Gender,
                 options = CharacterGender.entries,
             ),
         )

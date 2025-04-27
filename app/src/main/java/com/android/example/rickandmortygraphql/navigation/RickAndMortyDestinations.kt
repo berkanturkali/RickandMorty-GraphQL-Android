@@ -15,5 +15,6 @@ object RickAndMortyDestinations {
     data class CharacterFiltersScreen(
         val title: String,
         val filters: List<String>,
+        val previouslySelectedFilter: String? = null,
     )
 }

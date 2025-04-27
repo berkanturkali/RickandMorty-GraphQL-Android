@@ -105,4 +105,12 @@ dependencies {
 
     detektPlugins(libs.twitter.compose.rules)
 
+    //room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    //livedata
+    implementation(libs.androidx.compose.runtime.livedata)
+
 }

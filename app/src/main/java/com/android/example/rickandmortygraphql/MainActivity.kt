@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -24,6 +26,8 @@ import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import dagger.hilt.android.AndroidEntryPoint
 
+const val SELECTED_FILTER_ARG_KEY = "selected_filter"
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +35,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+
+            val context = LocalContext.current
             RickAndMortyGraphQLTheme {
                 Scaffold(
                     modifier = Modifier
@@ -76,19 +82,22 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                         ) {
+                            val selectedFilter = it.savedStateHandle.get<String>(
+                                SELECTED_FILTER_ARG_KEY
+                            )
                             CharacterFilterOptionsScreen(
+                                selectedFilter = selectedFilter,
                                 navigateUp = navController::navigateUp,
-                                onCheckMarkClick = {
-                                    // TODO: save the filters to local
-                                    navController.navigateUp()
-                                },
                                 onFilterOptionClick = { filter ->
+                                    val title = context.getString(filter.type.titleResId)
                                     navController.navigate(
                                         RickAndMortyDestinations.CharacterFiltersScreen(
-                                            title = filter.title,
+                                            title = title,
                                             filter.options.map {
                                                 it.toString()
-                                            })
+                                            },
+                                            previouslySelectedFilter = filter.selectedFilter
+                                        )
                                     )
                                 },
                             )
@@ -106,12 +115,21 @@ class MainActivity : ComponentActivity() {
                                 it.toRoute<RickAndMortyDestinations.CharacterFiltersScreen>().title
                             val filters =
                                 it.toRoute<RickAndMortyDestinations.CharacterFiltersScreen>().filters
+
+                            val previouslySelectedFilter =
+                                it.toRoute<RickAndMortyDestinations.CharacterFiltersScreen>().previouslySelectedFilter
+
                             FilterScreen(
                                 title = title,
                                 filters = filters,
-                                onBackButtonClick = navController::navigateUp,
-                                onCheckMarkClick = {
-
+                                previouslySelectedFilter = previouslySelectedFilter,
+                                onBackButtonClick = {
+                                    setSelectedFilter(navController, previouslySelectedFilter)
+                                    navController.navigateUp()
+                                },
+                                onCheckMarkClick = { selectedFilter ->
+                                    setSelectedFilter(navController, selectedFilter)
+                                    navController.navigateUp()
                                 }
                             )
                         }
@@ -119,5 +137,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun setSelectedFilter(navController: NavHostController, filter: String?) {
+        navController.previousBackStackEntry?.savedStateHandle?.set(
+            SELECTED_FILTER_ARG_KEY,
+            filter
+        )
     }
 }
