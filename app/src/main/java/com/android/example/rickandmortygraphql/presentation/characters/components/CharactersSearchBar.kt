@@ -57,6 +57,7 @@ fun CharactersSearchBar(
             onValueChange = {
                 onValueChanged(it)
             },
+            maxLines = 1,
             textStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.rickAndMortyColors.text.primary),
             cursorBrush = SolidColor(MaterialTheme.rickAndMortyColors.text.primary),
             modifier = Modifier
@@ -92,7 +93,6 @@ fun CharactersSearchBar(
                             )
                         }
                         innerTextField()
-
                     }
                     AnimatedVisibility(
                         visible = value.isNotEmpty(),
@@ -111,7 +111,6 @@ fun CharactersSearchBar(
                                 ) { onValueChanged("") }
                         )
                     }
-
                 }
 
             }

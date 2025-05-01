@@ -34,6 +34,8 @@ class CharactersScreenViewModel @Inject constructor(
 
     var searchQuery by mutableStateOf("")
 
+    var showLoading by mutableStateOf(false)
+
     var characters = mutableStateOf(emptyList<SimpleCharacter>())
         private set
 
@@ -46,7 +48,6 @@ class CharactersScreenViewModel @Inject constructor(
             snapshotFlow {
                 searchQuery
             }
-
                 .map {
                     it.ifBlank { null }
                 }
@@ -71,12 +72,15 @@ class CharactersScreenViewModel @Inject constructor(
     }
 
     fun fetchCharacters(name: String?, characterFilters: CharacterFilterEntity?, page: Int = 1) {
+        showLoading = true
         viewModelScope.launch {
             try {
                 characters.value = characterClient.getCharacters(name, characterFilters, page)
             } catch (e: Exception) {
                 Timber.e("Error fetching characters: ${e.message}")
                 e.printStackTrace()
+            } finally {
+                showLoading = false
             }
         }
     }

@@ -1,5 +1,8 @@
 package com.android.example.rickandmortygraphql.presentation.characters.screen
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
@@ -14,15 +17,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +41,9 @@ import com.android.example.rickandmortygraphql.presentation.characters.component
 import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
+
+private const val CHARACTER_ITEM_INITIAL_ANIM_VALUE = 500
+private const val CHARACTER_ITEM_ANIM_DURATION = 300
 
 @Composable
 fun CharactersScreen(
@@ -58,12 +68,14 @@ fun CharactersScreen(
         onSearchQueryChanged = {
             viewModel.searchQuery = it
         },
-        modifier = modifier
+        modifier = modifier,
+        isLoading = viewModel.showLoading
     )
 }
 
 @Composable
 private fun CharactersScreenContent(
+    isLoading: Boolean,
     searchQuery: String,
     showBadgeOnFiltersIcon: Boolean,
     characters: List<SimpleCharacter>,
@@ -71,6 +83,8 @@ private fun CharactersScreenContent(
     onSearchQueryChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val listState = rememberLazyListState()
     Column(
         modifier = modifier.padding(vertical = 8.dp, horizontal = 10.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -118,18 +132,49 @@ private fun CharactersScreenContent(
             value = searchQuery,
             onValueChanged = onSearchQueryChanged,
         )
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            items(characters) {
-                CharacterItem(
-                    name = it.name ?: "",
-                    image = it.image ?: "",
-                    status = it.status ?: CharacterStatus.Unknown,
-                    species = it.species ?: "",
-                    location = it.lastKnownLocation ?: "",
-                    origin = it.origin ?: "",
-                    modifier = Modifier.padding(8.dp)
+
+        if (!isLoading) {
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = listState
+            ) {
+                items(characters) {
+                    val initialValue = if (listState.lastScrolledForward) {
+                        CHARACTER_ITEM_INITIAL_ANIM_VALUE
+                    } else {
+                        -CHARACTER_ITEM_INITIAL_ANIM_VALUE
+                    }
+                    val animatedProgress =
+                        remember { Animatable(initialValue = initialValue.toFloat()) }
+                    LaunchedEffect(Unit) {
+                        animatedProgress.animateTo(
+                            targetValue = 0f,
+                            animationSpec = tween(
+                                CHARACTER_ITEM_ANIM_DURATION,
+                                easing = LinearEasing
+                            )
+                        )
+                    }
+
+                    CharacterItem(
+                        name = it.name ?: "",
+                        image = it.image ?: "",
+                        status = it.status ?: CharacterStatus.Unknown,
+                        species = it.species ?: "",
+                        location = it.lastKnownLocation ?: "",
+                        origin = it.origin ?: "",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .graphicsLayer(translationY = animatedProgress.value)
+                    )
+                }
+            }
+        } else {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(32.dp),
+                    color = MaterialTheme.rickAndMortyColors.text.primary
                 )
             }
         }
@@ -170,7 +215,8 @@ private fun CharactersScreenContentPrev() {
             ),
             onSearchQueryChanged = {},
             navigateToFilterScreen = { /*TODO*/ },
-            showBadgeOnFiltersIcon = true
+            showBadgeOnFiltersIcon = true,
+            isLoading = false
         )
     }
 }
