@@ -1,7 +1,10 @@
 package com.android.example.rickandmortygraphql.data
 
 import com.android.example.rickandmortygraphql.model.CharacterStatus
+import com.android.example.rickandmortygraphql.model.DetailedCharacter
+import com.android.example.rickandmortygraphql.model.Episode
 import com.android.example.rickandmortygraphql.model.SimpleCharacter
+import com.example.CharacterQuery
 import com.example.CharactersQuery
 
 fun CharactersQuery.Characters.toSimpleCharacters(): List<SimpleCharacter> {
@@ -16,7 +19,31 @@ fun CharactersQuery.Characters.toSimpleCharacters(): List<SimpleCharacter> {
             species = character.species,
             origin = character.origin?.name,
             lastKnownLocation = character.location?.name,
-            image = character.image,
+            image = character.image ?: "",
+            id = character.id,
         )
     } ?: emptyList()
+}
+
+fun CharacterQuery.Character.toDetailedCharacter(): DetailedCharacter {
+    return DetailedCharacter(
+        id = id,
+        image = image,
+        status = status?.let { status ->
+            CharacterStatus.valueOf(status.replaceFirstChar {
+                it.uppercase()
+            })
+        },
+        species = species,
+        origin = origin?.name,
+        lastKnownLocation = location?.name,
+        episode = episode.map {
+            Episode(
+                id = it?.id,
+                name = it?.name,
+                created = it?.created
+            )
+        },
+        name = name,
+    )
 }

@@ -28,6 +28,7 @@ import com.android.example.rickandmortygraphql.R
 import com.android.example.rickandmortygraphql.model.CharacterStatus
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
+import com.android.example.rickandmortygraphql.utils.noRippleClickable
 import timber.log.Timber
 
 @Composable

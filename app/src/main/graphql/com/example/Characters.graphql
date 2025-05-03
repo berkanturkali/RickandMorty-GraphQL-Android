@@ -12,6 +12,7 @@ query Characters(
         gender: $gender
     }) {
         results {
+            id
             name
             status
             species

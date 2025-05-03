@@ -41,6 +41,7 @@ import com.android.example.rickandmortygraphql.presentation.characters.component
 import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
+import com.android.example.rickandmortygraphql.utils.noRippleClickable
 
 private const val CHARACTER_ITEM_INITIAL_ANIM_VALUE = 500
 private const val CHARACTER_ITEM_ANIM_DURATION = 300
@@ -49,6 +50,7 @@ private const val CHARACTER_ITEM_ANIM_DURATION = 300
 fun CharactersScreen(
     setBadgeOnFilters: Boolean?,
     navigateToFilterScreen: () -> Unit,
+    onCharacterClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CharactersScreenViewModel,
 ) {
@@ -69,7 +71,8 @@ fun CharactersScreen(
             viewModel.searchQuery = it
         },
         modifier = modifier,
-        isLoading = viewModel.showLoading
+        isLoading = viewModel.showLoading,
+        onCharacterClick = onCharacterClick
     )
 }
 
@@ -80,6 +83,7 @@ private fun CharactersScreenContent(
     showBadgeOnFiltersIcon: Boolean,
     characters: List<SimpleCharacter>,
     navigateToFilterScreen: () -> Unit,
+    onCharacterClick: (String) -> Unit,
     onSearchQueryChanged: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -166,6 +170,11 @@ private fun CharactersScreenContent(
                         origin = it.origin ?: "",
                         modifier = Modifier
                             .padding(8.dp)
+                            .noRippleClickable {
+                                it.id?.let { id ->
+                                    onCharacterClick(id)
+                                }
+                            }
                             .graphicsLayer(translationY = animatedProgress.value)
                     )
                 }
@@ -194,7 +203,8 @@ private fun CharactersScreenContentPrev() {
                     species = "Human",
                     origin = "Earth",
                     lastKnownLocation = "Earth",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                    id = null
                 ),
                 SimpleCharacter(
                     name = "Rick Sanchez",
@@ -202,7 +212,8 @@ private fun CharactersScreenContentPrev() {
                     species = "Human",
                     origin = "Earth",
                     lastKnownLocation = "Earth",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                    id = null
                 ),
                 SimpleCharacter(
                     name = "Rick Sanchez",
@@ -210,13 +221,15 @@ private fun CharactersScreenContentPrev() {
                     species = "Human",
                     origin = "Earth",
                     lastKnownLocation = "Earth",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                    id = null
                 ),
             ),
             onSearchQueryChanged = {},
             navigateToFilterScreen = { /*TODO*/ },
             showBadgeOnFiltersIcon = true,
-            isLoading = false
+            isLoading = false,
+            onCharacterClick = {}
         )
     }
 }

@@ -1,6 +1,5 @@
 package com.android.example.rickandmortygraphql.navigation
 
-import com.android.example.rickandmortygraphql.model.CharacterFilter
 import kotlinx.serialization.Serializable
 
 
@@ -16,5 +15,10 @@ object RickAndMortyDestinations {
         val title: String,
         val filters: List<String>,
         val previouslySelectedFilter: String? = null,
+    )
+
+    @Serializable
+    data class CharacterDetailsScreen(
+        val id: String,
     )
 }

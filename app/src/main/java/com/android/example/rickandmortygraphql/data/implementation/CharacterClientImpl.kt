@@ -2,10 +2,13 @@ package com.android.example.rickandmortygraphql.data.implementation
 
 import com.android.example.rickandmortygraphql.data.abstraction.CharacterClient
 import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilterEntity
+import com.android.example.rickandmortygraphql.data.toDetailedCharacter
 import com.android.example.rickandmortygraphql.data.toSimpleCharacters
+import com.android.example.rickandmortygraphql.model.DetailedCharacter
 import com.android.example.rickandmortygraphql.model.SimpleCharacter
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Optional
+import com.example.CharacterQuery
 import com.example.CharactersQuery
 import javax.inject.Inject
 
@@ -30,5 +33,17 @@ class CharacterClientImpl @Inject constructor(
             .data
             ?.characters
             ?.toSimpleCharacters() ?: emptyList()
+    }
+
+    override suspend fun getCharacter(id: String): DetailedCharacter? {
+        return apolloClient.query(
+            CharacterQuery(
+                id = id
+            )
+        )
+            .execute()
+            .data
+            ?.character
+            ?.toDetailedCharacter()
     }
 }
