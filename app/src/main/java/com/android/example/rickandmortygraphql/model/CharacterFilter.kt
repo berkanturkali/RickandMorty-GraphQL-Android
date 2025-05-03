@@ -9,7 +9,7 @@ data class CharacterFilter<T>(
 )
 
 sealed class CharacterFilterType(val titleResId: Int) {
-    data object Status : CharacterFilterType(R.string.status_filter_title)
-    data object Species : CharacterFilterType(R.string.species_filter_title)
-    data object Gender : CharacterFilterType(R.string.gender_filter_title)
+    data object Status : CharacterFilterType(R.string.status)
+    data object Species : CharacterFilterType(R.string.species)
+    data object Gender : CharacterFilterType(R.string.gender)
 }

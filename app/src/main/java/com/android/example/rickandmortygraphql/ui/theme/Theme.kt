@@ -26,6 +26,9 @@ private val DarkThemeColors = RickAndMortyColors(
     text = TextColors(
         primary = Color(0xFFFFFFFF),
         gray = Color(0xFF9E9E9E),
+    ),
+    icon = IconColors(
+        primary = Color(0xFF007AFF)
     )
 )
 

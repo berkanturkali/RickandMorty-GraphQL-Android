@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.example.rickandmortygraphql.navigation.RickAndMortyDestinations
+import com.android.example.rickandmortygraphql.presentation.character.screen.CharacterScreen
 import com.android.example.rickandmortygraphql.presentation.characters.screen.CharactersScreen
 import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
 import com.android.example.rickandmortygraphql.presentation.filter.screen.CharacterFilterOptionsScreen
@@ -65,6 +66,8 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = RickAndMortyDestinations.CharactersScreen
                         ) {
+
+                            //region 🔵 CharactersScreen 🔵
                             composable<RickAndMortyDestinations.CharactersScreen>(
                                 enterTransition = {
                                     slideInHorizontally(
@@ -98,6 +101,10 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate(RickAndMortyDestinations.CharacterFilterOptionsScreen)
                                     })
                             }
+
+                            //endregion
+
+                            //region 🔵 CharacterFilterOptionsScreen 🔵
 
                             composable<RickAndMortyDestinations.CharacterFilterOptionsScreen>(
                                 enterTransition = {
@@ -140,6 +147,10 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
 
+                            //endregion
+
+                            //region 🔵 CharacterFilterScreen 🔵
+
                             composable<RickAndMortyDestinations.CharacterFiltersScreen>(
                                 enterTransition = {
                                     slideInHorizontally(initialOffsetX = { -it })
@@ -162,7 +173,6 @@ class MainActivity : ComponentActivity() {
                                     previouslySelectedFilter = previouslySelectedFilter,
                                     onBackButtonClick = {
                                         setSelectedFilter(navController, previouslySelectedFilter)
-                                        navController.navigateUp()
                                     },
                                     onCheckMarkClick = { selectedFilter ->
                                         setSelectedFilter(navController, selectedFilter)
@@ -170,6 +180,22 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+
+                            //endregion
+
+                            //region 🔵 CharacterScreen 🔵
+
+                            composable<RickAndMortyDestinations.CharacterDetailsScreen>(
+                                enterTransition = {
+                                    slideInHorizontally(initialOffsetX = { -it })
+                                },
+                                exitTransition = {
+                                    slideOutHorizontally(targetOffsetX = { it })
+                                },
+                            ) {
+                                CharacterScreen()
+                            }
+                            //endregion
                         }
                     }
                 }

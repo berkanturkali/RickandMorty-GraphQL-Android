@@ -26,6 +26,7 @@ import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilter
 import com.android.example.rickandmortygraphql.model.CharacterFilter
 import com.android.example.rickandmortygraphql.model.CharacterFilterDataSource
 import com.android.example.rickandmortygraphql.model.CharacterFilterType
+import com.android.example.rickandmortygraphql.presentation.components.RickAndMortyBackButton
 import com.android.example.rickandmortygraphql.presentation.filter.components.FilterOptionItem
 import com.android.example.rickandmortygraphql.presentation.filter.viewmodel.CharacterFilterViewModel
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
@@ -49,7 +50,6 @@ fun CharacterFilterOptionsScreen(
 
     CharacterFilterOptionsScreenContent(
         modifier = modifier,
-        navigateUp = navigateUp,
         onCheckMarkClick = {
             var filterEntity =
                 CharacterFilterEntity(id = viewModel.defaultFilterId ?: UUID.randomUUID())
@@ -79,7 +79,6 @@ fun CharacterFilterOptionsScreen(
 private fun CharacterFilterOptionsScreenContent(
     enableCheckMark: Boolean,
     filters: List<CharacterFilter<*>>,
-    navigateUp: () -> Unit,
     onCheckMarkClick: () -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
@@ -93,7 +92,7 @@ private fun CharacterFilterOptionsScreenContent(
     ) {
         FiltersTopBar(
             enableCheckMark = enableCheckMark,
-            onBackButtonClick = navigateUp,
+            onBackButtonClick = {},
             onCheckMarkClick = onCheckMarkClick,
         )
 
@@ -132,16 +131,7 @@ fun FiltersTopBar(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_back),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(4.dp)
-                        .noRippleClickable {
-                            onBackButtonClick()
-                        }
-                )
+                RickAndMortyBackButton(onClick = onBackButtonClick)
 
                 Text(
                     text = title,
@@ -152,7 +142,7 @@ fun FiltersTopBar(
                 Icon(
                     painter = painterResource(R.drawable.ic_check),
                     contentDescription = null,
-                    tint = if (enableCheckMark) MaterialTheme.rickAndMortyColors.text.primary else MaterialTheme.rickAndMortyColors.text.gray,
+                    tint = if (enableCheckMark) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .padding(4.dp)
@@ -181,7 +171,6 @@ fun CharacterFilterOptionsScreenContentPreview() {
     RickAndMortyGraphQLTheme {
         CharacterFilterOptionsScreenContent(
             enableCheckMark = false,
-            navigateUp = {},
             onCheckMarkClick = {},
             onFilterOptionClick = {},
             filters = CharacterFilterDataSource.getFilters(LocalContext.current)

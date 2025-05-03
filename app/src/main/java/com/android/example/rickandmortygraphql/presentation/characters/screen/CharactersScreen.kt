@@ -103,11 +103,11 @@ private fun CharactersScreenContent(
             Icon(
                 painter = painterResource(id = R.drawable.ic_filter),
                 contentDescription = null,
-                tint = MaterialTheme.rickAndMortyColors.text.primary,
+                tint = MaterialTheme.rickAndMortyColors.icon.primary,
                 modifier = Modifier
                     .border(
                         1.dp,
-                        color = MaterialTheme.rickAndMortyColors.text.primary,
+                        color = MaterialTheme.rickAndMortyColors.icon.primary,
                         shape = CircleShape
                     )
                     .padding(4.dp)

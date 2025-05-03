@@ -1,6 +1,8 @@
 package com.android.example.rickandmortygraphql.presentation.characters.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,8 +28,6 @@ import coil3.compose.SubcomposeAsyncImage
 import com.android.example.rickandmortygraphql.R
 import com.android.example.rickandmortygraphql.model.CharacterStatus
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
-import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
-import com.android.example.rickandmortygraphql.utils.noRippleClickable
 import timber.log.Timber
 
 @Composable
@@ -45,10 +44,14 @@ fun CharacterItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(120.dp),
-        shape = RoundedCornerShape(8.dp),
+            .height(120.dp)
+            .border(
+                BorderStroke(0.5.dp, color = Color.LightGray),
+                shape = RoundedCornerShape(16.dp)
+            ),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.rickAndMortyColors.background.surface,
+            containerColor = Color.Transparent
         )
     ) {
         Row(
@@ -83,7 +86,7 @@ fun CharacterItem(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(8.dp)),
+                    .clip(RoundedCornerShape(16.dp)),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.CenterStart

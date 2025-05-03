@@ -2,15 +2,16 @@ package com.android.example.rickandmortygraphql.presentation.character.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -26,7 +27,6 @@ import coil3.compose.SubcomposeAsyncImage
 import com.android.example.rickandmortygraphql.R
 import com.android.example.rickandmortygraphql.presentation.components.RickAndMortyBackButton
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
-import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import com.android.example.rickandmortygraphql.utils.LocalNavController
 import timber.log.Timber
 
@@ -36,52 +36,53 @@ fun CharacterImage(
     modifier: Modifier = Modifier
 ) {
 
-    Box(
+    Column(
         modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.35f)
-            .background(
-                MaterialTheme.rickAndMortyColors.background.surface.copy(alpha = 0.8f),
-                shape = RoundedCornerShape(12.dp)
-            ),
-        contentAlignment = Alignment.Center
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         RickAndMortyBackButton(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(8.dp)
+            size = 28.dp,
+            modifier = Modifier.padding(2.dp)
         )
 
-        SubcomposeAsyncImage(
-            model = image,
-            error = {
-
-                Timber.e("Error loading image: $it")
-                Image(
-                    painter = painterResource(id = R.drawable.ic_broken_image),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .padding(8.dp)
-                        .align(Alignment.Center)
-                )
-
-            },
-            loading = {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.Center),
-                    color = Color.White,
-                    strokeWidth = 2.dp
-                )
-            },
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(12.dp)),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-        )
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.Black)
+        ) {
+
+            SubcomposeAsyncImage(
+                model = image,
+                error = {
+
+                    Timber.e("Error loading image: $it")
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_broken_image),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(8.dp)
+                            .align(Alignment.Center)
+                    )
+
+                },
+                loading = {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.Center),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+            )
+        }
     }
 }
 

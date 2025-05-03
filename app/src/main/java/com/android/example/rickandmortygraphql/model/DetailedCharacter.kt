@@ -8,7 +8,7 @@ data class DetailedCharacter(
     override val species: String?,
     override val origin: String?,
     override val lastKnownLocation: String?,
-    val episode: List<Episode>,
+    val episodes: List<Episode>,
 ) : Character
 
 data class Episode(

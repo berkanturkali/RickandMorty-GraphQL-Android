@@ -150,7 +150,7 @@ private fun FilterItem(
             Icon(
                 painterResource(R.drawable.ic_round_check),
                 contentDescription = null,
-                tint = MaterialTheme.rickAndMortyColors.text.primary,
+                tint = MaterialTheme.rickAndMortyColors.icon.primary,
                 modifier = Modifier
                     .size(20.dp)
                     .alpha(alpha)

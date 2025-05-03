@@ -7,9 +7,11 @@
     <string name="search_by_name">Search by name</string>
     <string name="filter_options_title">Filters</string>
 
-    <string name="status_filter_title">Status</string>
-    <string name="species_filter_title">Species</string>
-    <string name="gender_filter_title">Gender</string>
+    <string name="status">Status</string>
+    <string name="species">Species</string>
+    <string name="gender">Gender</string>
+    <string name="origin">Origin</string>
+    <string name="episodes">Episodes</string>
 
     <string-array name="species_filter_options">
         <item>Human</item>

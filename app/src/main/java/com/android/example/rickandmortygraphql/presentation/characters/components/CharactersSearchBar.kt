@@ -3,6 +3,8 @@ package com.android.example.rickandmortygraphql.presentation.characters.componen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,10 +50,15 @@ fun CharactersSearchBar(
     var isFocused by remember { androidx.compose.runtime.mutableStateOf(false) }
 
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .border(
+                BorderStroke(0.5.dp, color = Color.LightGray),
+                shape = RoundedCornerShape(16.dp)
+            ),
         shadowElevation = 4.dp,
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.rickAndMortyColors.background.surface,
+        color = Color.Transparent
     ) {
         BasicTextField(
             value = value,
