@@ -29,6 +29,10 @@ private val DarkThemeColors = RickAndMortyColors(
     ),
     icon = IconColors(
         primary = Color(0xFF007AFF)
+    ),
+    bottomBarColor = BottomBarColors(
+        selected = Color(0xFFFFFFFF),
+        unselected = Color(0xFF9E9E9E),
     )
 )
 

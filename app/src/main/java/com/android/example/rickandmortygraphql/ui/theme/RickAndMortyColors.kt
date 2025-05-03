@@ -10,7 +10,8 @@ val LocalRickAndMortyColorPalette = staticCompositionLocalOf { RickAndMortyColor
 data class RickAndMortyColors(
     val background: BackgroundColors = BackgroundColors(),
     val text: TextColors = TextColors(),
-    val icon: IconColors = IconColors()
+    val icon: IconColors = IconColors(),
+    val bottomBarColor: BottomBarColors = BottomBarColors()
 )
 
 @Immutable
@@ -27,5 +28,11 @@ data class TextColors(
 
 @Immutable
 data class IconColors(
-    val primary: Color = Color.Unspecified
+    val primary: Color = Color.Unspecified,
+)
+
+@Immutable
+data class BottomBarColors(
+    val selected: Color = Color.Unspecified,
+    val unselected: Color = Color.Unspecified
 )

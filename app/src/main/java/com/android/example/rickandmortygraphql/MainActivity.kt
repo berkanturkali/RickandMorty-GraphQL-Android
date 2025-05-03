@@ -4,15 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -21,12 +25,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.android.example.rickandmortygraphql.navigation.RickAndMortyDestinations
 import com.android.example.rickandmortygraphql.presentation.character.screen.CharacterScreen
 import com.android.example.rickandmortygraphql.presentation.characters.screen.CharactersScreen
 import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
+import com.android.example.rickandmortygraphql.presentation.components.RickAndMortyBottomBar
 import com.android.example.rickandmortygraphql.presentation.filter.screen.CharacterFilterOptionsScreen
 import com.android.example.rickandmortygraphql.presentation.filter.screen.FilterScreen
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
@@ -47,6 +53,12 @@ class MainActivity : ComponentActivity() {
 
             val focusManager = LocalFocusManager.current
 
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+            val showBottomBar = when (navBackStackEntry?.destination?.route) {
+                RickAndMortyDestinations.CharactersScreen::class.qualifiedName -> true
+                else -> false
+            }
             val context = LocalContext.current
             RickAndMortyGraphQLTheme {
                 CompositionLocalProvider(LocalNavController provides navController) {
@@ -58,7 +70,16 @@ class MainActivity : ComponentActivity() {
                                     focusManager.clearFocus(true)
                                 }
                             },
-                        containerColor = MaterialTheme.rickAndMortyColors.background.primary
+                        containerColor = MaterialTheme.rickAndMortyColors.background.primary,
+                        bottomBar = {
+                            AnimatedVisibility(
+                                visible = showBottomBar,
+                                enter = slideInVertically { fullHeight -> fullHeight },
+                                exit = slideOutVertically { fullHeight -> fullHeight },
+                            ) {
+                                RickAndMortyBottomBar()
+                            }
+                        }
                     ) { innerPadding ->
 
                         NavHost(
@@ -105,7 +126,6 @@ class MainActivity : ComponentActivity() {
                             //endregion
 
                             //region 🔵 CharacterFilterOptionsScreen 🔵
-
                             composable<RickAndMortyDestinations.CharacterFilterOptionsScreen>(
                                 enterTransition = {
                                     slideInHorizontally(

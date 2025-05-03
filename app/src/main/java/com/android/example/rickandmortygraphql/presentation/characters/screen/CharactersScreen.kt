@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -136,6 +137,8 @@ private fun CharactersScreenContent(
             value = searchQuery,
             onValueChanged = onSearchQueryChanged,
         )
+
+        HorizontalDivider(thickness = 0.2.dp, color = Color.LightGray)
 
         if (!isLoading) {
 
