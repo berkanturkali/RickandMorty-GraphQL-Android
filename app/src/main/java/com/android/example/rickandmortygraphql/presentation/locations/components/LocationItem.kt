@@ -24,6 +24,8 @@ import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 
 @Composable
 fun LocationItem(
+    location: String,
+    type: String,
     modifier: Modifier = Modifier,
 ) {
 
@@ -56,12 +58,12 @@ fun LocationItem(
 
             HorizontalSection(
                 title = stringResource(R.string.location),
-                text = "Earth (C-137)",
+                text = location,
             )
 
             HorizontalSection(
                 title = stringResource(R.string.type),
-                text = "Planet",
+                text = type,
             )
         }
     }
@@ -72,6 +74,9 @@ fun LocationItem(
 @Composable
 private fun LocationItemPrev() {
     RickAndMortyGraphQLTheme {
-        LocationItem()
+        LocationItem(
+            location = "Earth (C-137)",
+            type = "Planet",
+        )
     }
 }

@@ -11,6 +11,7 @@ import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilter
 import com.android.example.rickandmortygraphql.data.repository.FilterRepository
 import com.android.example.rickandmortygraphql.model.SimpleCharacter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -43,6 +44,7 @@ class CharactersScreenViewModel @Inject constructor(
 
     private val filters = MutableStateFlow<CharacterFilterEntity?>(null)
 
+    @OptIn(FlowPreview::class)
     private val _searchQuery: Flow<String?>
         get() =
             snapshotFlow {

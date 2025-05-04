@@ -35,6 +35,7 @@ import com.android.example.rickandmortygraphql.presentation.characters.viewmodel
 import com.android.example.rickandmortygraphql.presentation.components.RickAndMortyBottomBar
 import com.android.example.rickandmortygraphql.presentation.filter.screen.CharacterFilterOptionsScreen
 import com.android.example.rickandmortygraphql.presentation.filter.screen.FilterScreen
+import com.android.example.rickandmortygraphql.presentation.locations.screen.LocationsScreen
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import com.android.example.rickandmortygraphql.utils.LocalNavController
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
                 RickAndMortyDestinations.CharactersScreen::class.qualifiedName,
                 RickAndMortyDestinations.LocationsScreen::class.qualifiedName,
                 RickAndMortyDestinations.EpisodesScreen::class.qualifiedName -> true
+
                 else -> false
             }
             val context = LocalContext.current
@@ -79,7 +81,15 @@ class MainActivity : ComponentActivity() {
                                 enter = slideInVertically { fullHeight -> fullHeight },
                                 exit = slideOutVertically { fullHeight -> fullHeight },
                             ) {
-                                RickAndMortyBottomBar()
+                                RickAndMortyBottomBar(onItemClick = {
+                                    navController.navigate(it) {
+                                        popUpTo(RickAndMortyDestinations.CharactersScreen) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                })
                             }
                         }
                     ) { innerPadding ->
@@ -229,9 +239,8 @@ class MainActivity : ComponentActivity() {
                                     slideOutHorizontally(targetOffsetX = { it })
                                 },
                             ) {
-
+                                LocationsScreen()
                             }
-
                             //endregion
 
                         }

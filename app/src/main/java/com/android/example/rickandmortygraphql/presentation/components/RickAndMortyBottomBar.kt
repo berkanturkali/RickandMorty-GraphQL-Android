@@ -22,11 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.example.rickandmortygraphql.model.BottomBarItems
+import com.android.example.rickandmortygraphql.navigation.RickAndMortyDestinations
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 
 @Composable
 fun RickAndMortyBottomBar(
+    onItemClick: (RickAndMortyDestinations) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
@@ -53,6 +55,7 @@ fun RickAndMortyBottomBar(
                     selected = selectedItem == item,
                     onClick = {
                         selectedItem = item
+                        onItemClick(item.destination)
                     },
                     icon = {
                         Icon(
@@ -84,6 +87,6 @@ fun RickAndMortyBottomBar(
 @Composable
 private fun RickAndMortyBottomBarPrev() {
     RickAndMortyGraphQLTheme {
-        RickAndMortyBottomBar()
+        RickAndMortyBottomBar(onItemClick = {})
     }
 }

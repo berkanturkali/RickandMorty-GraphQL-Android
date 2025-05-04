@@ -44,8 +44,8 @@ import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
 import com.android.example.rickandmortygraphql.utils.noRippleClickable
 
-private const val CHARACTER_ITEM_INITIAL_ANIM_VALUE = 500
-private const val CHARACTER_ITEM_ANIM_DURATION = 300
+const val LIST_ITEM_INITIAL_ANIM_VALUE = 500
+const val LIST_ITEM_ANIM_DURATION = 300
 
 @Composable
 fun CharactersScreen(
@@ -148,9 +148,9 @@ private fun CharactersScreenContent(
             ) {
                 items(characters) {
                     val initialValue = if (listState.lastScrolledForward) {
-                        CHARACTER_ITEM_INITIAL_ANIM_VALUE
+                        LIST_ITEM_INITIAL_ANIM_VALUE
                     } else {
-                        -CHARACTER_ITEM_INITIAL_ANIM_VALUE
+                        -LIST_ITEM_INITIAL_ANIM_VALUE
                     }
                     val animatedProgress =
                         remember { Animatable(initialValue = initialValue.toFloat()) }
@@ -158,7 +158,7 @@ private fun CharactersScreenContent(
                         animatedProgress.animateTo(
                             targetValue = 0f,
                             animationSpec = tween(
-                                CHARACTER_ITEM_ANIM_DURATION,
+                                LIST_ITEM_ANIM_DURATION,
                                 easing = LinearEasing
                             )
                         )
