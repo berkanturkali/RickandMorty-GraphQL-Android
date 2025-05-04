@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,7 +48,10 @@ fun EpisodeItem(
                 .fillMaxSize()
                 .padding(vertical = 16.dp, horizontal = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(
+                16.dp,
+                alignment = Alignment.CenterVertically
+            )
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_movieclapper),

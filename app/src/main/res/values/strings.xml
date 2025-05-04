@@ -16,6 +16,9 @@
     <string name="locations">Locations</string>
     <string name="location">Location:</string>
     <string name="type">Type:</string>
+    <string name="episode_name">Episode Name:</string>
+    <string name="date">Date:</string>
+    <string name="episode">Episode:</string>
 
     <string-array name="species_filter_options">
         <item>Human</item>

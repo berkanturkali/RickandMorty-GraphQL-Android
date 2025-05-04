@@ -1,8 +1,10 @@
 package com.android.example.rickandmortygraphql.di
 
 import com.android.example.rickandmortygraphql.data.abstraction.CharacterClient
+import com.android.example.rickandmortygraphql.data.abstraction.EpisodeClient
 import com.android.example.rickandmortygraphql.data.abstraction.LocationClient
 import com.android.example.rickandmortygraphql.data.implementation.CharacterClientImpl
+import com.android.example.rickandmortygraphql.data.implementation.EpisodeClientImpl
 import com.android.example.rickandmortygraphql.data.implementation.LocationClientImpl
 import dagger.Module
 import dagger.Provides
@@ -26,5 +28,12 @@ object ClientModule {
         locationClientImpl: LocationClientImpl
     ): LocationClient {
         return locationClientImpl
+    }
+
+    @[Provides Singleton]
+    fun provideEpisodeClient(
+        episodeClientImpl: EpisodeClientImpl
+    ): EpisodeClient {
+        return episodeClientImpl
     }
 }

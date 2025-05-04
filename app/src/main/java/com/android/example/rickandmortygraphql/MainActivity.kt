@@ -33,6 +33,7 @@ import com.android.example.rickandmortygraphql.presentation.character.screen.Cha
 import com.android.example.rickandmortygraphql.presentation.characters.screen.CharactersScreen
 import com.android.example.rickandmortygraphql.presentation.characters.viewmodel.CharactersScreenViewModel
 import com.android.example.rickandmortygraphql.presentation.components.RickAndMortyBottomBar
+import com.android.example.rickandmortygraphql.presentation.episodes.screen.EpisodesScreen
 import com.android.example.rickandmortygraphql.presentation.filter.screen.CharacterFilterOptionsScreen
 import com.android.example.rickandmortygraphql.presentation.filter.screen.FilterScreen
 import com.android.example.rickandmortygraphql.presentation.locations.screen.LocationsScreen
@@ -241,6 +242,20 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 LocationsScreen()
                             }
+                            //endregion
+
+                            //region 🔵 EpisodesScreen 🔵
+                            composable<RickAndMortyDestinations.EpisodesScreen>(
+                                enterTransition = {
+                                    slideInHorizontally(initialOffsetX = { -it })
+                                },
+                                exitTransition = {
+                                    slideOutHorizontally(targetOffsetX = { it })
+                                },
+                            ) {
+                                EpisodesScreen()
+                            }
+
                             //endregion
 
                         }

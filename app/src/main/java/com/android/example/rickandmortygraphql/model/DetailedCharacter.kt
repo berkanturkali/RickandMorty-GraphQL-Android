@@ -12,7 +12,9 @@ data class DetailedCharacter(
 ) : Character
 
 data class Episode(
-    val id: String?,
-    val name: String?,
-    val created: String?,
+    val id: String? = null,
+    val name: String? = null,
+    val airDate: String? = null,
+    val episode: String? = null,
+    val created: String? = null,
 )
