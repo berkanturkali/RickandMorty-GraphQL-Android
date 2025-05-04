@@ -56,7 +56,9 @@ class MainActivity : ComponentActivity() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
 
             val showBottomBar = when (navBackStackEntry?.destination?.route) {
-                RickAndMortyDestinations.CharactersScreen::class.qualifiedName -> true
+                RickAndMortyDestinations.CharactersScreen::class.qualifiedName,
+                RickAndMortyDestinations.LocationsScreen::class.qualifiedName,
+                RickAndMortyDestinations.EpisodesScreen::class.qualifiedName -> true
                 else -> false
             }
             val context = LocalContext.current
@@ -216,6 +218,22 @@ class MainActivity : ComponentActivity() {
                                 CharacterScreen()
                             }
                             //endregion
+
+                            //region 🔵 LocationsScreen 🔵
+
+                            composable<RickAndMortyDestinations.LocationsScreen>(
+                                enterTransition = {
+                                    slideInHorizontally(initialOffsetX = { -it })
+                                },
+                                exitTransition = {
+                                    slideOutHorizontally(targetOffsetX = { it })
+                                },
+                            ) {
+
+                            }
+
+                            //endregion
+
                         }
                     }
                 }

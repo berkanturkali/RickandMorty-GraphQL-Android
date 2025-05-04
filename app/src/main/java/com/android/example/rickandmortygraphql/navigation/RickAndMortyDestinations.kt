@@ -21,4 +21,10 @@ object RickAndMortyDestinations {
     data class CharacterDetailsScreen(
         val id: String,
     )
+
+    @Serializable
+    data object LocationsScreen
+
+    @Serializable
+    data object EpisodesScreen
 }

@@ -14,6 +14,8 @@
     <string name="episodes">Episodes</string>
     <string name="characters">Characters</string>
     <string name="locations">Locations</string>
+    <string name="location">Location:</string>
+    <string name="type">Type:</string>
 
     <string-array name="species_filter_options">
         <item>Human</item>
