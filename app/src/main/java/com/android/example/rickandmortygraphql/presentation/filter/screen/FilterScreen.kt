@@ -79,7 +79,8 @@ fun FilterScreenContent(
                 onCheckMarkClick(selectedFilter)
             },
             onClearFiltersClick = {},
-            enableClearFilters = false
+            enableClearFilters = false,
+            showClearFiltersButton = false
         )
 
         filters.forEach { filter ->

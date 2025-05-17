@@ -138,6 +138,7 @@ fun FiltersTopBar(
     onClearFiltersClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.filter_options_title),
+    showClearFiltersButton: Boolean = true,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.rickAndMortyColors.text.primary) {
         Column(
@@ -162,18 +163,19 @@ fun FiltersTopBar(
                         .padding(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
-                    Icon(
-                        painter = painterResource(R.drawable.ic_delete),
-                        contentDescription = null,
-                        tint = if (enableClearFilters) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
-                        modifier = Modifier
-                            .noRippleClickable {
-                                if (enableClearFilters) {
-                                    onClearFiltersClick()
+                    if (showClearFiltersButton) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete),
+                            contentDescription = null,
+                            tint = if (enableClearFilters) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
+                            modifier = Modifier
+                                .noRippleClickable {
+                                    if (enableClearFilters) {
+                                        onClearFiltersClick()
+                                    }
                                 }
-                            }
-                    )
+                        )
+                    }
 
                     Icon(
                         painter = painterResource(R.drawable.ic_check),
