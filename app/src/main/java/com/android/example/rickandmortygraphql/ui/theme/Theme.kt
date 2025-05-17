@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.android.example.rickandmortygraphql.model.RickAndMortyTheme
 
 val MaterialTheme.rickAndMortyColors: RickAndMortyColors
     @Composable
@@ -22,6 +23,42 @@ private val DarkThemeColors = RickAndMortyColors(
     background = BackgroundColors(
         primary = Color(0xFF0F0F0F),
         surface = Color(0xFF3C3E44),
+    ),
+    text = TextColors(
+        primary = Color(0xFFFFFFFF),
+        gray = Color(0xFF9E9E9E),
+    ),
+    icon = IconColors(
+        primary = Color(0xFF007AFF)
+    ),
+    bottomBarColor = BottomBarColors(
+        selected = Color(0xFFFFFFFF),
+        unselected = Color(0xFF9E9E9E),
+    )
+)
+
+private val LightThemeColors = RickAndMortyColors(
+    background = BackgroundColors(
+        primary = Color(0xFFFFFFFF),
+        surface = Color(0xFFF5F5F5),
+    ),
+    text = TextColors(
+        primary = Color(0xFF000000),
+        gray = Color(0xFF9E9E9E),
+    ),
+    icon = IconColors(
+        primary = Color(0xFF007AFF)
+    ),
+    bottomBarColor = BottomBarColors(
+        selected = Color(0xFF000000),
+        unselected = Color(0xFF9E9E9E),
+    )
+)
+
+private val DimThemeColors = RickAndMortyColors(
+    background = BackgroundColors(
+        primary = Color(0xFF15202B),
+        surface = Color(0XFF192734),
     ),
     text = TextColors(
         primary = Color(0xFFFFFFFF),
@@ -60,6 +97,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun RickAndMortyGraphQLTheme(
+    theme: RickAndMortyTheme = RickAndMortyTheme.DARK,
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
@@ -74,7 +112,13 @@ fun RickAndMortyGraphQLTheme(
         else -> LightColorScheme
     }
 
-    val colorPalette = DarkThemeColors
+    val colorPalette = when(
+        theme
+    ) {
+        RickAndMortyTheme.DARK -> DarkThemeColors
+        RickAndMortyTheme.LIGHT -> LightThemeColors
+        RickAndMortyTheme.DIM -> DimThemeColors
+    }
 
     CompositionLocalProvider(
         LocalRickAndMortyColorPalette provides colorPalette

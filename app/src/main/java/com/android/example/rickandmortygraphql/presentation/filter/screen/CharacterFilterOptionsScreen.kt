@@ -3,6 +3,7 @@ package com.android.example.rickandmortygraphql.presentation.filter.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.android.example.rickandmortygraphql.R
 import com.android.example.rickandmortygraphql.data.cache.entity.CharacterFilterEntity
 import com.android.example.rickandmortygraphql.model.CharacterFilter
@@ -31,6 +33,7 @@ import com.android.example.rickandmortygraphql.presentation.filter.components.Fi
 import com.android.example.rickandmortygraphql.presentation.filter.viewmodel.CharacterFilterViewModel
 import com.android.example.rickandmortygraphql.ui.theme.RickAndMortyGraphQLTheme
 import com.android.example.rickandmortygraphql.ui.theme.rickAndMortyColors
+import com.android.example.rickandmortygraphql.utils.LocalNavController
 import com.android.example.rickandmortygraphql.utils.noRippleClickable
 import java.util.UUID
 
@@ -38,13 +41,15 @@ import java.util.UUID
 fun CharacterFilterOptionsScreen(
     selectedFilter: String?,
     navigateUp: () -> Unit,
-    onCheckMarkClick: () -> Unit,
+    onCheckMarkClick: (List<CharacterFilter<*>>) -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CharacterFilterViewModel = hiltViewModel(),
 ) {
 
     val filters = viewModel.filters
+
+    val context = LocalContext.current
 
     viewModel.setSelectedFilter(selectedFilter)
 
@@ -63,7 +68,7 @@ fun CharacterFilterOptionsScreen(
             viewModel.insertCharacterFilter(
                 filterEntity
             )
-            onCheckMarkClick()
+            onCheckMarkClick(viewModel.filters)
             navigateUp()
         },
         onFilterOptionClick = {
@@ -71,19 +76,27 @@ fun CharacterFilterOptionsScreen(
             onFilterOptionClick(it)
         },
         filters = filters,
-        enableCheckMark = viewModel.enableCheckMark
+        enableCheckMark = viewModel.enableCheckMark,
+        enableClearFilters = viewModel.enableClearFilters,
+        onClearFiltersClick = {
+            viewModel.filters = CharacterFilterDataSource.getFilters(context = context)
+            viewModel.selectedFilterType = null
+            viewModel.enableClearFilters = false
+            viewModel.enableCheckMark = true
+        },
     )
 }
 
 @Composable
 private fun CharacterFilterOptionsScreenContent(
+    enableClearFilters: Boolean,
     enableCheckMark: Boolean,
     filters: List<CharacterFilter<*>>,
     onCheckMarkClick: () -> Unit,
+    onClearFiltersClick: () -> Unit,
     onFilterOptionClick: (CharacterFilter<*>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -91,9 +104,11 @@ private fun CharacterFilterOptionsScreenContent(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         FiltersTopBar(
+            enableClearFilters = enableClearFilters,
             enableCheckMark = enableCheckMark,
             onBackButtonClick = {},
             onCheckMarkClick = onCheckMarkClick,
+            onClearFiltersClick = onClearFiltersClick
         )
 
         Column(
@@ -116,9 +131,11 @@ private fun CharacterFilterOptionsScreenContent(
 
 @Composable
 fun FiltersTopBar(
+    enableClearFilters: Boolean,
     enableCheckMark: Boolean,
     onBackButtonClick: () -> Unit,
     onCheckMarkClick: () -> Unit,
+    onClearFiltersClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.filter_options_title),
 ) {
@@ -139,19 +156,37 @@ fun FiltersTopBar(
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                Icon(
-                    painter = painterResource(R.drawable.ic_check),
-                    contentDescription = null,
-                    tint = if (enableCheckMark) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
+                Row(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .padding(4.dp)
-                        .noRippleClickable {
-                            if (enableCheckMark) {
-                                onCheckMarkClick()
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+
+                    Icon(
+                        painter = painterResource(R.drawable.ic_delete),
+                        contentDescription = null,
+                        tint = if (enableClearFilters) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
+                        modifier = Modifier
+                            .noRippleClickable {
+                                if (enableClearFilters) {
+                                    onClearFiltersClick()
+                                }
                             }
-                        }
-                )
+                    )
+
+                    Icon(
+                        painter = painterResource(R.drawable.ic_check),
+                        contentDescription = null,
+                        tint = if (enableCheckMark) MaterialTheme.rickAndMortyColors.icon.primary else MaterialTheme.rickAndMortyColors.text.gray,
+                        modifier = Modifier
+                            .noRippleClickable {
+                                if (enableCheckMark) {
+                                    onCheckMarkClick()
+                                }
+                            }
+                    )
+                }
 
             }
 
@@ -168,12 +203,16 @@ fun FiltersTopBar(
 @Composable
 @Preview
 fun CharacterFilterOptionsScreenContentPreview() {
-    RickAndMortyGraphQLTheme {
-        CharacterFilterOptionsScreenContent(
-            enableCheckMark = false,
-            onCheckMarkClick = {},
-            onFilterOptionClick = {},
-            filters = CharacterFilterDataSource.getFilters(LocalContext.current)
-        )
+    CompositionLocalProvider(LocalNavController provides rememberNavController()) {
+        RickAndMortyGraphQLTheme {
+            CharacterFilterOptionsScreenContent(
+                enableCheckMark = false,
+                onCheckMarkClick = {},
+                onFilterOptionClick = {},
+                filters = CharacterFilterDataSource.getFilters(LocalContext.current),
+                enableClearFilters = false,
+                onClearFiltersClick = {},
+            )
+        }
     }
 }

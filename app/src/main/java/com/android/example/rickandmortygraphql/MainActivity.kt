@@ -51,6 +51,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val viewModel = hiltViewModel<MainActivityViewModel>()
             val navController = rememberNavController()
 
             val focusManager = LocalFocusManager.current
@@ -65,7 +67,7 @@ class MainActivity : ComponentActivity() {
                 else -> false
             }
             val context = LocalContext.current
-            RickAndMortyGraphQLTheme {
+            RickAndMortyGraphQLTheme(theme = viewModel.theme) {
                 CompositionLocalProvider(LocalNavController provides navController) {
                     Scaffold(
                         modifier = Modifier
@@ -159,10 +161,12 @@ class MainActivity : ComponentActivity() {
                                 CharacterFilterOptionsScreen(
                                     selectedFilter = selectedFilter,
                                     navigateUp = navController::navigateUp,
-                                    onCheckMarkClick = {
+                                    onCheckMarkClick = { filters ->
                                         navController.previousBackStackEntry?.savedStateHandle?.set(
                                             SET_BADGE_ON_FILTERS_KEY,
-                                            true
+                                            filters.any { filter ->
+                                                filter.selectedFilter != null
+                                            }
                                         )
                                     },
                                     onFilterOptionClick = { filter ->

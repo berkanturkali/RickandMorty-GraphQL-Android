@@ -31,6 +31,8 @@ class CharacterFilterViewModel @Inject constructor(
 
     var enableCheckMark by mutableStateOf(false)
 
+    var enableClearFilters by mutableStateOf(false)
+
     var defaultFilterId: UUID? = null
 
     init {
@@ -50,6 +52,7 @@ class CharacterFilterViewModel @Inject constructor(
                 CharacterFilterDataSource.getFilters(application.applicationContext)
             }
             initialFilters = filters
+            enableClearFilters = filters.any { it.selectedFilter != null }
         }
     }
 
@@ -80,6 +83,7 @@ class CharacterFilterViewModel @Inject constructor(
             newList[modifiedFilterIndex] = modifiedItem
 
             filters = newList
+            enableClearFilters = filters.any { it.selectedFilter != null }
             enableCheckMark = filters != initialFilters
         }
     }
